@@ -34,3 +34,9 @@ const userSchema = new Schema({
     },
     id: false // This tells the schema not to create an _id virtual property. We don't need it because MongoDB already creates an _id field for each document
 });
+
+
+// Initialize our User model with the userSchema
+const User = model('User', userSchema);
+
+model.exports = User;
