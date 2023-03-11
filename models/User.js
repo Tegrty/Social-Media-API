@@ -35,6 +35,10 @@ const userSchema = new Schema({
     id: false // This tells the schema not to create an _id virtual property. We don't need it because MongoDB already creates an _id field for each document
 });
 
+// Virtual to get the length of the user's friends array
+userSchema.virtual('friendCount').get(function() {
+    return this.friends.length;
+});
 
 // Initialize our User model with the userSchema
 const User = model('User', userSchema);
