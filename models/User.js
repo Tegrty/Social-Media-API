@@ -12,7 +12,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        match: [/.+@.+\..+/, 'Must use a valid email address']
+        match: [/.+@.+\..+/, 'Must use a valid email address'] // This is a regular expression that checks for a valid email address
     },
     thoughts: [
         {

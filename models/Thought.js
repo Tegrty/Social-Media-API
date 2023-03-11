@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model,} = require('mongoose');
+
 
 // Schema to create thought model
 const thoughtSchema = new Schema({
@@ -11,7 +12,7 @@ const thoughtSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        get: createdAtVal => dateFormat(createdAtVal) // This is a getter that formats the timestamp on query
+        get: createdAtVal => dateFormat(createdAtVal) // This is a getter that formats the timestamp on query.
     },
     username: {
         type: String,
