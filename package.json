@@ -1,11 +1,11 @@
 {
-  "name": "25-Ins_Mongoose-CRUD",
+  "name": "Social-media-API",
   "version": "1.0.1",
   "description": "Social-Media-API",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index",
+    "start": "node server.js",
     "dev": "nodemon index",
     "seed": "node utils/seed"
   },
