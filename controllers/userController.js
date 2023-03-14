@@ -16,7 +16,7 @@ module.exports = {
 
 // Get a single user by its _id and populated thought and friend data
   getSingleUser: (req, res) => {
-    User.findOne({ _id: req.params.id })
+    User.findOne({ _id: req.params.userId })
       .populate([
         { path: 'thoughts', select: '-__v' },
         { path: 'friends', select: '-__v' },
@@ -45,7 +45,7 @@ module.exports = {
  // Update a user by its _id 
   updateUser: async (req, res, next) => {
     try {
-      if (req.params.id !== req.user.id.toString()) {
+      if (req.params.userId !== req.user.userId.toString()) {
         return res
           .status(401)
           .json({ message: 'You are not authorized to update this user!' });
