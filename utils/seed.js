@@ -20,13 +20,28 @@ connection.once("open", async () => {
       );
 
       // Associate thoughts with users
-      const thoughtsWithUsers = thoughts.map((thought, i) => ({
-        ...thought,
-        username: users[Math.floor(Math.random() * users.length)].username,
-      }));
+      const thoughtsWithUsers = thoughts.map((thought, i) => {
+        const user = users[Math.floor(Math.random() * users.length)];
+        return {
+          ...thought,
+          userId: user._id,
+          username: user.username,
+        };
+      });
 
       // Create new thoughts
-      await Thought.insertMany(thoughtsWithUsers);
+      const createdThoughts = await Thought.insertMany(thoughtsWithUsers);
+
+      // Update users' thoughts array with associated thoughts
+      for (const thought of createdThoughts) {
+        await User.findByIdAndUpdate(
+          thought.userId,
+          { $push: { thoughts: thought._id } },
+          { new: true, runValidators: true }
+        );
+      }
+      // Close the connection to the MongoDB server
+      await connection.close();
 
       console.log("Database seeded successfully! 🌱");
     } catch (error) {

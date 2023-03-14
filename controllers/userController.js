@@ -59,19 +59,22 @@ module.exports = {
         .catch((err) => res.status(400).json(err));
     },
 
- // Delete a user by its _id 
+ // Delete a user by its _id and remove it's associated thoughts
   deleteUser: (req, res) => {
     User.findOneAndDelete({ _id: req.params.userId })
-      .then((dbUserData) => {
-        if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
-          return;
-        }
-        res.json(dbUserData);
-      })
-      .catch((err) => res.status(400).json(err));
-  },
-
+        .then((dbUserData) => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
+                return;
+            }
+            return Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
+        })
+        .then(() => {
+            res.json({ message: 'Successfully deleted user and associated thoughts!' });
+        })
+        .catch((err) => res.status(400).json(err));
+    },
+    
  // Add a new friend to a user's friend list 
   addFriend: (req, res) => {
     User.findOneAndUpdate(
@@ -100,3 +103,4 @@ module.exports = {
       .catch((err) => res.json(err));
   },
 };
+
