@@ -43,26 +43,25 @@ module.exports = {
   },
 
  // Update a user by its _id 
-  updateUser: async (req, res, next) => {
-    try {
-      if (req.params.userId !== req.user.userId.toString()) {
-        return res
-          .status(401)
-          .json({ message: 'You are not authorized to update this user!' });
-      }
-
-      const updatedUser = await User.findByIdAndUpdate(req.params.id, {
-        $set: req.body,
-      });
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      next(error);
-    }
-  },
+  updateUser: (req, res) => {
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+    )
+        .then((dbUserData) => {
+            if (!dbUserData) {
+                res.status(404).json({ message: 'No user found with this id!' });
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch((err) => res.status(400).json(err));
+    },
 
  // Delete a user by its _id 
   deleteUser: (req, res) => {
-    User.findOneAndDelete({ _id: req.params.id })
+    User.findOneAndDelete({ _id: req.params.userId })
       .then((dbUserData) => {
         if (!dbUserData) {
           res.status(404).json({ message: 'No user found with this id!' });
