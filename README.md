@@ -15,6 +15,12 @@ Social-Media-API is a REST API that allows users to create, read, update, and de
 5. Terminal: Run `npm start` to begin the server.
 6. Inspect the database/CRUD operations using Insomnia Core or MongoDB Compass.
 
+
+
+https://user-images.githubusercontent.com/121316876/225192473-855d3ae0-eebd-49a3-930f-8a2e6668c914.mp4
+
+
+
 ## Technologies Used 🛠️
 
 - JavaScript
