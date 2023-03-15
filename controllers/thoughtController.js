@@ -37,23 +37,28 @@ module.exports = {
 
 // Create a thought and push the created thought's _id to the associated user's thoughts array field
     createThought: (req, res) => {
-        Thought.create(req.body)
-            .then(({ _id }) => {
-                return User.findOneAndUpdate(
-                    { _id: req.params.userId },
-                    { $push: { thoughts: _id } },
-                    { new: true }
-                );
-            })
-            .then((dbUserData) => {
-                if (!dbUserData) {
-                    res.status(404).json({ message: 'No user found with this id!' });
-                    return;
-                }
-                res.json(dbUserData);
-            })
-            .catch((err) => res.status(400).json(err));
-    },
+    const { thoughtText, username, userId } = req.body;
+  
+    Thought.create({ thoughtText, username, userId })
+      .then((thought) => {
+        return User.findByIdAndUpdate(
+          userId,
+          { $push: { thoughts: thought._id } },
+          { new: true }
+        );
+      })
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          return res.status(404).json({ message: 'No user found with this id!' });
+        }
+  
+        res.json({ message: 'Thought created successfully!' });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  },
 
 // Update a thought by its _id
     updateThought: (req, res) => {
